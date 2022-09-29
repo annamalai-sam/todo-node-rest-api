@@ -6,9 +6,10 @@ require('dotenv').config()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use('/api/tasks', router)
+app.use('/api', router)
 app.get("/", (req, res) => {
-    res.json({ message: "New get Request" });
+    let sender = { message: "New get Request" }
+    res.json(sender);
 });
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
