@@ -12,21 +12,39 @@
     <h1>Test</h1>
     <div id="demo"></div>
     <script>
-      $(document).ready(function () {
-        const xhttp = new XMLHttpRequest();
-        const url = "http://localhost:8080/task";
-        xhttp.onreadystatechange = function () {
-          if (this.readyState == 4 && this.status == 200) {
-            // Typical action to be performed when the document is ready:
-            //var data = xhttp.responseText;
-            var data = JSON.parse(xhttp.responseText);
-            console.log(data);
-            document.getElementById("demo").innerHTML = data.name;
-          }
-        };
-        xhttp.open("GET", url);
-        xhttp.send();
-      });
+      // $(document).ready(function () {
+      //   const xhttp = new XMLHttpRequest();
+      //   const url = "http://localhost:8080/api/tasks";
+      //   xhttp.onreadystatechange = function () {
+      //     if (this.readyState == 4 && this.status == 200) {
+      //       // Typical action to be performed when the document is ready:
+      //       //var data = xhttp.responseText;
+      //       var data = JSON.parse(xhttp.responseText);
+      //       console.log(data);
+      //       document.getElementById("demo").innerHTML = data.name;
+      //     }
+      //   };
+      //   xhttp.open("GET", url);
+      //   xhttp.send();
+      // });
+      // var myHeaders = new Headers();
+      // myHeaders.append("Content-Type", "application/json");
+
+      // var raw = JSON.stringify({
+      //   title: "Learn Js Fetch Data",
+      //   due_date: "2002-09-11 00:00:01",
+      // });
+
+      // var requestOptions = {
+      //   method: "GET",
+      //   headers: myHeaders,
+      //   body: raw,
+      //   redirect: "follow",
+      // };
+      fetch("http://localhost:8080/api/tasks")
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
     </script>
   </body>
 </html>
