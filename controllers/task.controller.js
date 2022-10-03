@@ -13,6 +13,7 @@ const addTask = async (req, res) => {
 
 const getAllTask = async (req, res) => {
     let task = await Task.findAll({})
+    console.log(task)
     res.status(200).send(task)
 }
 
