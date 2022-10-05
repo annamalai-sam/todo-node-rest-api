@@ -13,7 +13,7 @@ const addTask = async (req, res) => {
 
 const getAllTask = async (req, res) => {
     let task = await Task.findAll({})
-    console.log(task)
+    // console.log(task)
     res.status(200).send(task)
 }
 
@@ -32,6 +32,7 @@ const updateTask = async (req, res) => {
 
 const updateStatus = async (req, res) => {
     let id = req.params.id
+    // console.log(id)
     let update = { finished: true }
     const task = await Task.update(update, { where: { id: id } })
     res.status(200).send(task)
