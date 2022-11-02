@@ -44,4 +44,14 @@ db.tasks.belongsTo(db.users, {
     as: 'user'
 })
 
+db.users.hasOne(db.token, {
+    foreignKey: 'user_id',
+    as: 'user'
+})
+
+db.token.belongsTo(db.users, {
+    foreignKey: 'user_id',
+    as: 'user'
+})
+
 module.exports = db

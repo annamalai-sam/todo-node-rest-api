@@ -4,19 +4,18 @@ const User = db.users
 const Token = db.token
 const jwt = require('jsonwebtoken')
 const { where } = require("sequelize")
+// require('dotenv').config({ path: "./../.env" })
 // const userController = require("./user.controller")
-
 
 const loggedUser = async (req, res) => {
     const token = req.headers['authorization']
     const loggedUser = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    console.log("=================================")
-    console.log(loggedUser.exp)
-    console.log(loggedUser.exp * 1000)
-    console.log(Date.now())
-    console.log(Date.now() >= loggedUser.exp * 1000)
-    console.log("=================================")
-
+    // console.log("=================================")
+    // console.log(loggedUser.exp)
+    // console.log(loggedUser.exp * 1000)
+    // console.log(Date.now())
+    // console.log(Date.now() >= loggedUser.exp * 1000)
+    // console.log("=================================")
     let user = await User.findOne({
         where: { id: loggedUser.user_id },
         include: [{
@@ -45,7 +44,8 @@ const loginHandler = async (req, res) => {
     const assesToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h' })
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
     const token = {
-        refresh_token: refreshToken
+        refresh_token: refreshToken,
+        user_id: user.id
     }
     // console.log("==============================================")
     // console.log(payload)
@@ -74,3 +74,4 @@ module.exports = {
     loggedUser,
     reAuthenticateUser
 }
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZlbmthdCIsInBhc3N3b3JkIjoiSmVydUAyNiIsInVzZXJfaWQiOjEsImlhdCI6MTY2NjY3MTE3Nn0.IGfd5HOSbCsxVVIva_6andevjD - uOx0r_oStsnEJ7yc
