@@ -4,6 +4,7 @@ const User = db.users
 const Token = db.token
 const jwt = require('jsonwebtoken')
 const { where } = require("sequelize")
+const bcrypt = require("bcrypt")
 // require('dotenv').config({ path: "./../.env" })
 // const userController = require("./user.controller")
 
@@ -30,35 +31,40 @@ const loggedUser = async (req, res) => {
 }
 
 const loginHandler = async (req, res) => {
+
     const user = await User.findOne({
         where: {
             username: req.body.username,
-            password: req.body.password
         }
     })
-    const payload = {
-        username: user.username,
-        password: user.password,
-        user_id: user.id
+    if (await bcrypt.compare(req.body.password, user.password)) {
+        const payload = {
+            username: user.username,
+            password: user.password,
+            user_id: user.id
+        }
+        const assesToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h' })
+        const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
+        const token = {
+            refresh_token: refreshToken,
+            user_id: user.id
+        }
+        // console.log("==============================================")
+        // console.log(payload)
+        // console.log(assesToken)
+        // console.log(refreshToken)
+        // console.log("==============================================")
+        // console.log(token)
+        await Token.create(token)
+        const tokens = {
+            assesToken: assesToken,
+            refreshToken: refreshToken
+        }
+        res.status(200).send(tokens)
     }
-    const assesToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h' })
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
-    const token = {
-        refresh_token: refreshToken,
-        user_id: user.id
+    else {
+        res.status(200).send({ message: "Password is mismatched" })
     }
-    // console.log("==============================================")
-    // console.log(payload)
-    // console.log(assesToken)
-    // console.log(refreshToken)
-    // console.log("==============================================")
-    // console.log(token)
-    await Token.create(token)
-    const tokens = {
-        assesToken: assesToken,
-        refreshToken: refreshToken
-    }
-    res.status(200).send(tokens)
 }
 
 const reAuthenticateUser = async (req, res) => {
